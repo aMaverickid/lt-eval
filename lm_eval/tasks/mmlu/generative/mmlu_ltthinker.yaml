@@ -1,0 +1,15 @@
+group: mmlu_ltthinker
+group_alias: mmlu (ltthinker, generative, fewshot)
+task:
+  - mmlu_abstract_algebra
+  - mmlu_college_chemistry
+  - mmlu_college_computer_science
+  - mmlu_college_medicine
+  - mmlu_formal_logic
+  - mmlu_logical_fallacies
+  - mmlu_professional_medicine
+aggregate_metric_list:
+  - metric: exact_match
+    weight_by_size: true
+metadata:
+  version: 2.0

@@ -1,0 +1,19 @@
+group: bbh_ltthinker
+group_alias: bbh (ltthinker fewshot)
+task:
+  - bbh_fewshot_boolean_expressions
+  - bbh_fewshot_causal_judgement
+  - bbh_fewshot_formal_fallacies
+  - bbh_fewshot_logical_deduction_seven_objects
+  - bbh_fewshot_multistep_arithmetic_two
+  - bbh_fewshot_navigate
+  - bbh_fewshot_object_counting
+  - bbh_fewshot_ruin_names
+  - bbh_fewshot_temporal_sequences
+  - bbh_fewshot_web_of_lies
+aggregate_metric_list:
+  - metric: exact_match
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  version: 3.0

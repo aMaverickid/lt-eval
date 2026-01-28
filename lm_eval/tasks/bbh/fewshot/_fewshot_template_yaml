@@ -1,4 +1,5 @@
-dataset_path: SaylorTwift/bbh
+# dataset_path: SaylorTwift/bbh
+dataset_path: amaverickid/bbh_ltthinker
 output_type: generate_until
 test_split: test
 doc_to_target: "{{target}}"
