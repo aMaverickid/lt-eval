@@ -1,5 +1,4 @@
-# dataset_path: cais/mmlu
-dataset_path: amaverickid/mmlu_ltthinker
+dataset_path: cais/mmlu
 test_split: test
 fewshot_split: dev
 fewshot_config:
@@ -9,8 +8,12 @@ doc_to_text: "{{question.strip()}}\nA. {{choices[0]}}\nB. {{choices[1]}}\nC. {{c
 doc_to_target: "{{['A', 'B', 'C', 'D'][answer]}}"
 generation_kwargs:
   until:
-    - "</s>"
-    - "\n"
+    - "<im_end>"
+    - "<im_start>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+    - "<|start_header_id|>" 
+    - "<|end_of_text|>"
 metric_list:
   - metric: exact_match
     aggregation: mean
@@ -18,16 +21,32 @@ metric_list:
     ignore_punctuation: true
     ignore_case: true
 filter_list:
+  # - name: get_response
+  #   filter:
+  #     # Filter everything after the first break line
+  #     - function: "regex"
+  #       regex_pattern: "^(.*?)(?=\\n|$)"
+  #     # Remove leading white spaces
+  #     - function: remove_whitespace
+  #     # function to ignore right white spaces or line breaks
+  #     - function: "regex"
+  #       regex_pattern: "^(.*?)\\s*$"
+  #     - function: take_first
   - name: get_response
     filter:
-      # Filter everything after the first break line
+      # 第一步：截取第一行（保留原有逻辑，先去掉后面的长篇大论）
+      # 结果："C. Intubation"
       - function: "regex"
         regex_pattern: "^(.*?)(?=\\n|$)"
-      # Remove leading white spaces
-      - function: remove_whitespace
-      # function to ignore right white spaces or line breaks
+      
+      # 【新增】第二步：只提取开头的单个大写字母
+      # 逻辑：匹配字符串开头(^)的第一个大写字母([A-Z])
+      # 结果："C"
       - function: "regex"
-        regex_pattern: "^(.*?)\\s*$"
+        regex_pattern: "^([A-Z])"
+        
+      # 第三步：清理（防止意外的空格）
+      - function: remove_whitespace
       - function: take_first
 metadata:
   version: 3.0

@@ -1,0 +1,17 @@
+"dataset_name": "temporal_sequences"
+"description": "Task description: Answer questions about which times certain events could have occurred.\n\n"
+"include": "_cot_zeroshot_template_yaml"
+"task": "bbh_ltthinker_vanilla_temporal_sequences"
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: "regex"
+        group_select: -1
+        regex_pattern: "\\\\boxed\\{\\s*(?:\\\\text\\{)?\\s*\\(?([A-Z])\\)?\\s*(?:\\})?\\s*\\}"
+      - function: "take_first"
+  - name: "flexible-extract"
+    filter:
+      - function: "regex"
+        group_select: -1
+        regex_pattern: "\\\\boxed\\{.*?\\b([A-Z])\\b.*?\\}"
+      - function: "take_first"

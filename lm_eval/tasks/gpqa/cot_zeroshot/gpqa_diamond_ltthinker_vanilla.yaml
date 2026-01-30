@@ -1,0 +1,56 @@
+dataset_path: Idavidrein/gpqa
+task: gpqa_diamond_ltthinker_vanilla
+output_type: generate_until
+process_docs: !function utils.process_docs
+training_split: train
+validation_split: train
+test_split: null
+doc_to_text: "Return your final response within \\boxed{}. {{Question}}\nChoices:\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}"
+doc_to_target: answer
+generation_kwargs:
+  until:
+    - "<im_end>"
+    - "<im_start>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+    - "<|start_header_id|>" 
+    - "<|end_of_text|>"
+    - "<|im_end|>"
+  do_sample: false
+  temperature: 0.0
+num_fewshot: 0
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: true
+    ignore_punctuation: true
+metadata:
+  version: 1.0
+
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: "regex"
+        group_select: -1
+        # 解释：
+        # 1. \\boxed\\{            -> 匹配 \boxed{
+        # 2. \\s*(?:\\\\text\\{)?  -> 允许空格或 \text{
+        # 3. \\s*\\(?              -> 【关键】匹配可选的左括号 '('，但不捕获
+        # 4. ([A-Z])               -> 【捕获组】只捕获大写字母 (A-Z)
+        # 5. \\)?                  -> 【关键】匹配可选的右括号 ')'，但不捕获
+        # 6. \\s*(?:\\})?          -> 允许 \text 的右括号
+        # 7. \\s*\\}               -> 匹配 \boxed 的右括号
+        regex_pattern: "\\\\boxed\\{\\s*(?:\\\\text\\{)?\\s*\\(?([A-Z])\\)?\\s*(?:\\})?\\s*\\}"
+      - function: "take_first"
+
+  - name: "flexible-extract"
+    filter:
+      - function: "regex"
+        group_select: -1
+        # 解释：如果严格匹配失败（例如盒子里有很多废话），使用这个兜底
+        # 1. \\boxed\\{.*?  -> 找到盒子，忽略前面的字符
+        # 2. \\b([A-Z])\\b  -> 提取独立的字母（利用单词边界防止匹配到单词中的字母）
+        # 3. .*?\\}         -> 忽略后面的字符
+        regex_pattern: "\\\\boxed\\{.*?\\b([A-Z])\\b.*?\\}"
+      - function: "take_first"

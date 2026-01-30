@@ -1,0 +1,30 @@
+"dataset_name": "web_of_lies"
+"description": "Evaluate a random boolean function expressed as a word problem.\n\n"
+"include": "_cot_zeroshot_template_yaml"
+"task": "bbh_ltthinker_vanilla_web_of_lies"
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false  # 必须显式设为 false，保留 \boxed 结构
+        regex_pattern_to_value:
+          # 使用 (?:...) 非捕获组，确保 find_match 返回包含 \boxed 的完整字符串
+          "\\\\boxed\\{\\s*(?:no|false|does not tell the truth|is not telling the truth)\\s*\\}": "no"
+          "\\\\boxed\\{\\s*(?:yes|true|tells the truth|is telling the truth)\\s*\\}": "yes"
+      - function: "take_first"
+
+  - name: "flexible-extract"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false # 同样必须保留标点
+        regex_pattern_to_value:
+          # 1. 同样使用 (?:...) 非捕获组
+          # 2. .*? 跳过 \text{ 等干扰
+          # 3. 这里的逻辑是：只要整个 \boxed{...} 结构匹配上，MapRegexFilter 就会把它映射为 "no"
+          "\\\\boxed\\{.*?(?:no|false|does not tell the truth|is not telling the truth)\\b.*?\\}": "no"
+          "\\\\boxed\\{.*?(?:yes|true|tells the truth|is telling the truth)\\b.*?\\}": "yes"
+      - function: "take_first"

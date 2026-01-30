@@ -1,0 +1,27 @@
+"dataset_name": "boolean_expressions"
+"description": "Evaluate the result of a random Boolean expression.\n\n"
+"include": "_cot_zeroshot_template_yaml"
+"task": "bbh_ltthinker_vanilla_boolean_expressions"
+
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false # 必须保留标点以识别 \boxed
+        regex_pattern_to_value:
+          "\\\\boxed\\{\\s*(?:True|TRUE|true)\\s*\\}": "True"
+          "\\\\boxed\\{\\s*(?:False|FALSE|false)\\s*\\}": "False"
+      - function: "take_first"
+  - name: "flexible-extract"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false
+        regex_pattern_to_value:
+          # 容错：跳过 \text{ 等字符，寻找单词边界的 True/False
+          "\\\\boxed\\{.*?(?:True|TRUE|true)\\b.*?\\}": "True"
+          "\\\\boxed\\{.*?(?:False|FALSE|false)\\b.*?\\}": "False"
+      - function: "take_first"

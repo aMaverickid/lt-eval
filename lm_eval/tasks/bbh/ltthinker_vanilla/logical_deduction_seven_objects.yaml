@@ -1,0 +1,20 @@
+"dataset_name": "logical_deduction_seven_objects"
+"description": "A logical deduction task which requires deducing the order of a sequence of objects.\n\n"
+"doc_to_text": "Q: {{input}}\nA: Let's think step by step."
+"include": "_cot_zeroshot_template_yaml"
+"task": "bbh_ltthinker_vanilla_logical_deduction_seven_objects"
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: "regex"
+        group_select: -1
+        # 匹配 \boxed{A} 或 \boxed{(A)}，提取 A
+        regex_pattern: "\\\\boxed\\{\\s*(?:\\\\text\\{)?\\s*\\(?([A-Z])\\)?\\s*(?:\\})?\\s*\\}"
+      - function: "take_first"
+  - name: "flexible-extract"
+    filter:
+      - function: "regex"
+        group_select: -1
+        # 容错：提取盒子内任意位置的大写字母单词
+        regex_pattern: "\\\\boxed\\{.*?\\b([A-Z])\\b.*?\\}"
+      - function: "take_first"

@@ -545,6 +545,7 @@ class VLLM(TemplateLM):
                             proc.kill()
 
         else:
+            eval_logger.info(f"Sampling_param setting: {sampling_params[0]}")
             outputs = self.model.generate(
                 [TokensPrompt(prompt_token_ids=request) for request in requests],
                 sampling_params=sampling_params,

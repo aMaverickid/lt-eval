@@ -1,0 +1,15 @@
+group: mmlu_ltthinker_vanilla
+group_alias: mmlu (ltthinker, vanilla, cot, zeroshot)
+task:
+  - mmlu_ltthinker_vanilla_abstract_algebra
+  - mmlu_ltthinker_vanilla_college_chemistry
+  - mmlu_ltthinker_vanilla_college_computer_science
+  - mmlu_ltthinker_vanilla_college_medicine
+  - mmlu_ltthinker_vanilla_formal_logic
+  - mmlu_ltthinker_vanilla_logical_fallacies
+  - mmlu_ltthinker_vanilla_professional_medicine  
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: True
+metadata:
+  version: 2

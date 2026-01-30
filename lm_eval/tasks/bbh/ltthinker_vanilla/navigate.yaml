@@ -1,0 +1,25 @@
+"dataset_name": "navigate"
+"description": "Given a series of navigation instructions, determine whether one would end up back at the starting point.\n\n"
+"include": "_cot_zeroshot_template_yaml"
+"task": "bbh_ltthinker_vanilla_navigate"
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false
+        regex_pattern_to_value:
+          "\\\\boxed\\{\\s*(?:Yes|yes|YES)\\s*\\}": "Yes"
+          "\\\\boxed\\{\\s*(?:No|no|NO)\\s*\\}": "No"
+      - function: "take_first"
+  - name: "flexible-extract"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false
+        regex_pattern_to_value:
+          "\\\\boxed\\{.*?(?:Yes|yes|YES)\\b.*?\\}": "Yes"
+          "\\\\boxed\\{.*?(?:No|no|NO)\\b.*?\\}": "No"
+      - function: "take_first"

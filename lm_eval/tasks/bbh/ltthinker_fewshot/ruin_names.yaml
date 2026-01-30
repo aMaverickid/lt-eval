@@ -1,0 +1,72 @@
+dataset_name: ruin_names
+description: 'Select the humorous edit that ''ruins'' the input movie or musical artist
+  name.
+
+
+  '
+doc_to_text: 'Q: {{input}}
+
+  A:'
+fewshot_config:
+  sampler: first_n
+  samples:
+  - input: 'Which of the following is a humorous edit of this artist or movie name:
+      ''whitesnake''?
+
+      Options:
+
+      (A) whitesnape
+
+      (B) whitesnapke
+
+      (C) whitesnuake
+
+      (D) mwhitesnake'
+    target: (A)
+  - input: 'Which of the following is a humorous edit of this artist or movie name:
+      ''one of our dinosaurs is missing''?
+
+      Options:
+
+      (A) ofne of our dinosaurs is missing
+
+      (B) one af our dinosaurs is missing
+
+      (C) one of our dinosaurs is pissing
+
+      (D) one of our dinosaur is missing'
+    target: (C)
+  - input: 'Which of the following is a humorous edit of this artist or movie name:
+      ''counting crows''?
+
+      Options:
+
+      (A) countingy crows
+
+      (B) counting cows
+
+      (C) courting crows
+
+      (D) coutnting crows'
+    target: (B)
+include: _fewshot_template_yaml
+task: bbh_ltthinker_fewshot_ruin_names
+filter_list:
+  - name: "flexible-extract"
+    filter:
+      - function: !function utils.MultiChoiceRegexFilter
+        # 重点修改这里：选择第 1 个捕获组，即下面正则中 ([A-Z]) 的部分
+        group_select: 0
+        ignore_case: true
+        ignore_punctuation: true
+        # 解释：
+        # (?:\\(|\\b) -> 左边是括号 OR 单词边界（?:表示不捕获）
+        # ([A-Z])      -> 捕获 A-Z（这是 group 1）
+        # (?:\\)|\\b)  -> 右边是括号 OR 单词边界
+        regex_pattern: "(?:\\(|\\b)([A-Z])(?:\\)|\\b)"
+      - function: "take_first"
+  - name: "strict-match"
+    filter:
+      - function: "regex"
+        regex_pattern: "((?<=The answer is )(.*)(?=.)|(?<=the answer is )(.*)(?=.)|(?<=The answer: )(.*)(?=.)|(?<=The final answer: )(.*)(?=.))"
+      - function: "take_first"

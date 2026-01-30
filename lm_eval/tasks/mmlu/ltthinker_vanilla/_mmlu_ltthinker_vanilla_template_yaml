@@ -1,0 +1,51 @@
+dataset_path: amaverickid/mmlu_ltthinker
+# validation_split: validation
+# fewshot_split: dev
+test_split: test
+output_type: generate_until
+# doc_to_text: "Q: {{question.strip()}}\n(A) {{choices[0]}} (B) {{choices[1]}} (C) {{choices[2]}} (D) {{choices[3]}}\nA: Let's think step by step."
+doc_to_text: "Return your final response within \\boxed{}. {{question.strip()}}\n(A) {{choices[0]}} (B) {{choices[1]}} (C) {{choices[2]}} (D) {{choices[3]}}"
+doc_to_target: "{{['(A)', '(B)', '(C)', '(D)'][answer]}}"
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: "regex"
+        group_select: -1
+        # 解释：
+        # 1. \\boxed\\{            
+        # 2. \\s*(?:\\\\text\\{)?  -> 忽略可能存在的 \text{
+        # 3. \\s*\\(?              -> 忽略可能存在的左括号 (
+        # 4. ([A-Z])               -> 【捕获】单个大写字母
+        # 5. \\)?                  -> 忽略可能存在的右括号 )
+        # 6. \\s*(?:\\})?          -> 忽略可能存在的 \text 闭合 }
+        # 7. \\s*\\}              
+        regex_pattern: "\\\\boxed\\{\\s*(?:\\\\text\\{)?\\s*\\(?([A-Z])\\)?\\s*(?:\\})?\\s*\\}"
+      - function: "take_first"
+
+  - name: "flexible-extract"
+    filter:
+      - function: "regex"
+        group_select: -1
+        # 解释：如果严格匹配失败，提取任何独立的单个大写字母
+        regex_pattern: "\\\\boxed\\{.*?\\b([A-Z])\\b.*?\\}"
+      - function: "take_first"
+generation_kwargs:
+  until:
+    - "<im_end>"
+    - "<im_start>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+    - "<|start_header_id|>" 
+    - "<|end_of_text|>"
+    - "<|im_end|>"
+  do_sample: false
+  temperature: 0.0
+num_fewshot: 0
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: true
+    ignore_punctuation: true
+metadata:
+  version: 3.0

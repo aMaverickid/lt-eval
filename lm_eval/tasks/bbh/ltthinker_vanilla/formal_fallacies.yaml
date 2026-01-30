@@ -1,0 +1,26 @@
+"dataset_name": "formal_fallacies"
+"description": "Distinguish deductively valid arguments from formal fallacies.\n\n"
+"include": "_cot_zeroshot_template_yaml"
+"task": "bbh_ltthinker_vanilla_formal_fallacies"
+
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false
+        regex_pattern_to_value:
+          "\\\\boxed\\{\\s*(?:valid)\\s*\\}": "valid"
+          "\\\\boxed\\{\\s*(?:invalid)\\s*\\}": "invalid"
+      - function: "take_first"
+  - name: "flexible-extract"
+    filter:
+      - function: !function utils.MapRegexFilter
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: false
+        regex_pattern_to_value:
+          "\\\\boxed\\{.*?(?:valid)\\b.*?\\}": "valid"
+          "\\\\boxed\\{.*?(?:invalid)\\b.*?\\}": "invalid"
+      - function: "take_first"
