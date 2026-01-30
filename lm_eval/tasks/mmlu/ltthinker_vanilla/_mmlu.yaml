@@ -7,9 +7,11 @@ task:
   - mmlu_ltthinker_vanilla_college_medicine
   - mmlu_ltthinker_vanilla_formal_logic
   - mmlu_ltthinker_vanilla_logical_fallacies
-  - mmlu_ltthinker_vanilla_professional_medicine  
+  - mmlu_ltthinker_vanilla_professional_medicine    
 aggregate_metric_list:
-  - metric: acc
+  - metric: exact_match
+    aggregation: mean
     weight_by_size: True
+    filter_list: flexible-extract
 metadata:
   version: 2
