@@ -2,7 +2,7 @@
 unset http_proxy
 unset https_proxy
 export HF_ENDPOINT=https://hf-mirror.com
-export HF_TOKEN=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
+
 set -euo pipefail
 
 # ================= 参数解析 =================

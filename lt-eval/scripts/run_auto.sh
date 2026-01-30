@@ -1,5 +1,5 @@
 export HF_ENDPOINT=https://hf-mirror.com
-export HF_TOKEN=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
+# export HF_TOKEN=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
 #!/usr/bin/env bash
 set -euo pipefail
 
