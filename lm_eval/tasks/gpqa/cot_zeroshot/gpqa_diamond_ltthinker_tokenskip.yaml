@@ -1,11 +1,11 @@
 dataset_path: Idavidrein/gpqa
-task: gpqa_diamond_ltthinker_vanilla
+task: gpqa_diamond_ltthinker_tokenskip
 output_type: generate_until
 process_docs: !function utils.process_docs
 training_split: train
 validation_split: train
 test_split: null
-doc_to_text: "Return your final response within \\boxed{}.\n### Question:\n{{Question}\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}"
+doc_to_text: "Return your final response within \\boxed{}.\n### Question:\n{{Question}\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}<|eot_id|>0.5<|eot_id|>"
 doc_to_target: answer
 generation_kwargs:
   until:

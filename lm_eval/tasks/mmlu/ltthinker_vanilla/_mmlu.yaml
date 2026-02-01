@@ -1,5 +1,5 @@
 group: mmlu_ltthinker_vanilla
-group_alias: mmlu (ltthinker, vanilla, cot, zeroshot)
+group_alias: mmlu (ltthinker, vanilla)
 task:
   - mmlu_ltthinker_vanilla_abstract_algebra
   - mmlu_ltthinker_vanilla_college_chemistry

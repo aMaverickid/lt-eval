@@ -631,6 +631,9 @@ class VLLM(TemplateLM):
 
         # batch tokenize contexts
         context, all_gen_kwargs = zip(*(req.args for req in requests), strict=True)
+        eval_logger.info(f"Sample of requests to generate from: {requests[0]}\n")
+        eval_logger.info(f"Sample of contexts to generate from: {context[0]}\nSample of gen_kwargs: {all_gen_kwargs[0]}")
+
         context_encoding = self.tok_encode(context)
         reqs = [
             ((a, b), c)

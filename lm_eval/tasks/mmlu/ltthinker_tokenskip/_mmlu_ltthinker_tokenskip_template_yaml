@@ -4,7 +4,7 @@ dataset_path: amaverickid/mmlu_ltthinker
 test_split: test
 output_type: generate_until
 # doc_to_text: "Q: {{question.strip()}}\n(A) {{choices[0]}} (B) {{choices[1]}} (C) {{choices[2]}} (D) {{choices[3]}}\nA: Let's think step by step."
-doc_to_text: "Return your final response within \\boxed{}.\n### Question:\n{{question.strip()}}\n(A) {{choices[0]}} (B) {{choices[1]}} (C) {{choices[2]}} (D) {{choices[3]}}"
+doc_to_text: "Return your final response within \\boxed{}.\n### Question:\n{{question.strip()}}\n(A) {{choices[0]}} (B) {{choices[1]}} (C) {{choices[2]}} (D) {{choices[3]}}<|eot_id|>0.5<|eot_id|>"
 doc_to_target: "{{['(A)', '(B)', '(C)', '(D)'][answer]}}"
 filter_list:
   - name: "strict-match"

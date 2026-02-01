@@ -1,0 +1,17 @@
+group: mmlu_ltthinker_tokenskip
+group_alias: mmlu (ltthinker, tokenskip)
+task:
+  - mmlu_ltthinker_tokenskip_abstract_algebra
+  - mmlu_ltthinker_tokenskip_college_chemistry
+  - mmlu_ltthinker_tokenskip_college_computer_science
+  - mmlu_ltthinker_tokenskip_college_medicine
+  - mmlu_ltthinker_tokenskip_formal_logic
+  - mmlu_ltthinker_tokenskip_logical_fallacies
+  - mmlu_ltthinker_tokenskip_professional_medicine    
+aggregate_metric_list:
+  - metric: exact_match
+    aggregation: mean
+    weight_by_size: True
+    filter_list: flexible-extract
+metadata:
+  version: 2

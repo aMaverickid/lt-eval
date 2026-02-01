@@ -1,5 +1,5 @@
 group: bbh_ltthinker_vanilla
-group_alias: bbh (ltthinker fewshot)
+group_alias: bbh (ltthinker vanilla)
 task:
   - bbh_ltthinker_vanilla_boolean_expressions
   - bbh_ltthinker_vanilla_causal_judgement

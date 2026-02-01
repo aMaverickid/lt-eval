@@ -25,10 +25,10 @@ RESULT_DIR="/disk0/wanzhenjie/lt-eval/results_prompt_token_cnt"
 
 # ================= 运行 =================
 CUDA_VISIBLE_DEVICES="${GPU_ID}" lm_eval \
-  --model vllm \
+  --model vllm_ltthinker \
   --model_args pretrained="${MODEL_PATH}",tensor_parallel_size=1,dtype=auto \
   --tasks "${TASK_NAME}" \
-  --gen_kwargs max_tokens=16384,temperature=0.7,top_p=0.95,repetition_penalty=1.05 \
+  --gen_kwargs max_tokens=16384,temperature=0.7,top_p=0.95,repetition_penalty=1.05,do_sample=True \
   --batch_size auto \
   --apply_chat_template \
   -o "${RESULT_DIR}" \
